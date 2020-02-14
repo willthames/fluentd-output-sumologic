@@ -268,16 +268,17 @@ class Fluent::Plugin::Sumologic < Fluent::Plugin::Output
     messages_list.each do |key, messages|
       source_name, source_category, source_host, fields = key[:source_name], key[:source_category],
         key[:source_host], key[:fields]
-      @sumo_conn.publish(
-          messages.join("\n"),
-          source_host         =source_host,
-          source_category     =source_category,
-          source_name         =source_name,
-          data_type           =@data_type,
-          metric_data_format  =@metric_data_format,
-          collected_fields    =fields
-      )
+      messages.each do |message|
+        @sumo_conn.publish(
+            message,
+            source_host         =source_host,
+            source_category     =source_category,
+            source_name         =source_name,
+            data_type           =@data_type,
+            metric_data_format  =@metric_data_format,
+            collected_fields    =fields
+        )
+      end
     end
-
   end
 end
